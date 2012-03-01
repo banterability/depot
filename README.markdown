@@ -1,6 +1,6 @@
 # localStorageWrapper
 
-A wrapper around [window.localStorage API][1] supporting non-string types & convenience methods like pop & push.
+A wrapper around the [window.localStorage API][1] supporting non-string types & convenience methods like pop & push.
 
 ## To-do
 - Feature detection
