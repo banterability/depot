@@ -6,9 +6,11 @@ A wrapper around [window.localStorage API][1] supporting non-string types & conv
 - Feature detection
 - Key prefixing
 - Left-side methods on arrays (shift, unshift)
-- Unit tests
+- More unit tests
+- Restore [safety wrapper][2] to library
 
 ## *Not* to-do
 - localStorage emulation (via cookies, etc.)
 
 [1]: http://dev.w3.org/html5/webstorage/#storage
+[2]: http://coffeescript.org/#lexical_scope
