@@ -7,7 +7,7 @@ task 'build', 'build localStorageWrapper (lib, tests & docs)', ->
 
 task 'build:lib', 'build the localStorageWrapper library', ->
   console.log "Building app..."
-  runner 'coffee', ['-c', '-o', 'lib', 'src']
+  runner 'coffee', ['-b', '-c', '-o', 'lib', 'src']
 
 task 'build:tests', 'build Jasmine tests', ->
   console.log "Building tests..."

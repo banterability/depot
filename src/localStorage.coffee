@@ -1,5 +1,5 @@
 class LocalStorageWrapper
-  initialize: ->
+  constructor: ->
     @store = window.localStorage
 
   # Wraps window.localStorage.getItem
