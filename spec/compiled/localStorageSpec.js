@@ -1,6 +1,7 @@
 (function() {
   beforeEach(function() {
-    return this.store = new LocalStorageWrapper;
+    this.store = new LocalStorageWrapper;
+    return window.localStorage.clear();
   });
   describe("LocalStorageWrapper", function() {
     describe("wraps window.localStorage methods", function() {

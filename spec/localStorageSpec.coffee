@@ -1,5 +1,6 @@
 beforeEach ->
   @store = new LocalStorageWrapper
+  window.localStorage.clear()
 
 describe "LocalStorageWrapper", ->
   describe "wraps window.localStorage methods", ->
