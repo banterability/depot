@@ -1,12 +1,38 @@
 # localStorageWrapper
 
-A wrapper around the [window.localStorage API][1] supporting non-string types & convenience methods like pop & push.
+A wrapper around the [window.localStorage API][1].
+
+## Features
+- Support for non-string values:
+
+    ```javascript
+    store.set('album', {album: "Mass Romantic", band: "The New Pornographers", year: 2000});
+    ```
+
+- Array methods like pop & push:
+
+    ```javascript
+    store.set('numbers', [1, 2, 3, 4]);
+    
+    store.push('numbers', 5)
+    // 'numbers' = [1, 2, 3, 4, 5]
+    
+    store.pop('numbers')
+    -> 5
+    // 'numbers' = [1, 2, 3, 4]
+    ```
+
+- Key prefixing:
+
+    ```javascript
+    var store = new LocalStorageWrapper('myapp');
+    value = store.get('username');
+    // same as: window.localStorage.getItem('myapp:username');
+    ```
 
 ## To-do
 - Feature detection
-- Key prefixing
 - Left-side methods on arrays (shift, unshift)
-- More unit tests
 - Restore [safety wrapper][2] to library
 
 ## *Not* to-do
