@@ -15,13 +15,13 @@ class LocalStorageWrapper
   push: (key, obj) ->
     val = @get key || []
     val.push obj
-    @set key val
+    @set key, val
 
   pop: (key) ->
     val = @get key || []
     # Save popped object for return
     poppedObj = val.pop()
-    @set key val
+    @set key, val
     poppedObj
 
   delete: (key) ->

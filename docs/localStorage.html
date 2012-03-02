@@ -10,11 +10,11 @@ Encodes native objects to JSON before storing</p>             </td>             
   <span class="nv">push: </span><span class="nf">(key, obj) -&gt;</span>
     <span class="nv">val = </span><span class="nx">@get</span> <span class="nx">key</span> <span class="o">||</span> <span class="p">[]</span>
     <span class="nx">val</span><span class="p">.</span><span class="nx">push</span> <span class="nx">obj</span>
-    <span class="nx">@set</span> <span class="nx">key</span> <span class="nx">val</span>
+    <span class="nx">@set</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">val</span>
 
   <span class="nv">pop: </span><span class="nf">(key) -&gt;</span>
     <span class="nv">val = </span><span class="nx">@get</span> <span class="nx">key</span> <span class="o">||</span> <span class="p">[]</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Save popped object for return</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">poppedObj = </span><span class="nx">val</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
-    <span class="nx">@set</span> <span class="nx">key</span> <span class="nx">val</span>
+    <span class="nx">@set</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">val</span>
     <span class="nx">poppedObj</span>
 
   <span class="k">delete</span><span class="o">:</span> <span class="nf">(key) -&gt;</span>

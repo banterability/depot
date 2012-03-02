@@ -28,7 +28,7 @@
         });
       });
     });
-    return describe("converts complex types to & from JSON", function() {
+    describe("converts complex types to & from JSON", function() {
       beforeEach(function() {
         this.nativeObj = {
           album: "Mass Romantic",
@@ -47,6 +47,28 @@
         localStorage.setItem('album', this.jsonObj);
         response = this.store.get('album');
         return expect(response).toEqual(this.nativeObj);
+      });
+    });
+    return describe("array convenience functions", function() {
+      beforeEach(function() {
+        return this.store.set('sampleArray', [1, 2, 3, 4, 5]);
+      });
+      describe("pop()", function() {
+        return it("pops the last element off the array", function() {
+          var poppedObj, remainingObj;
+          poppedObj = this.store.pop('sampleArray');
+          remainingObj = this.store.get('sampleArray');
+          expect(poppedObj).toEqual(5);
+          return expect(remainingObj).toEqual([1, 2, 3, 4]);
+        });
+      });
+      return describe("push()", function() {
+        return it("appends an element to the end of an array", function() {
+          var obj;
+          this.store.push('sampleArray', 6);
+          obj = this.store.get('sampleArray');
+          return expect(obj).toEqual([1, 2, 3, 4, 5, 6]);
+        });
       });
     });
   });
