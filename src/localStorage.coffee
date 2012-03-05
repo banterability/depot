@@ -1,3 +1,5 @@
+root = exports ? this
+
 class LocalStorageWrapper
   constructor: (prefix = null)->
     @store = window.localStorage
@@ -33,3 +35,5 @@ class LocalStorageWrapper
       "#{@prefix}:#{key}"
     else
       key
+
+root.LocalStorageWrapper = LocalStorageWrapper

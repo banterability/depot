@@ -33,10 +33,8 @@ A wrapper around the [window.localStorage API][1].
 ## To-do
 - Feature detection
 - Left-side methods on arrays (shift, unshift)
-- Restore [safety wrapper][2] to library
 
 ## *Not* to-do
 - localStorage emulation (via cookies, etc.)
 
 [1]: http://dev.w3.org/html5/webstorage/#storage
-[2]: http://coffeescript.org/#lexical_scope
