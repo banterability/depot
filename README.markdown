@@ -22,7 +22,7 @@ A wrapper around the [window.localStorage API][1].
     // 'numbers' = [1, 2, 3, 4]
     ```
 
-- Simple counters
+- Simple counters:
 
     ```javascript
     store.incr('visitors')

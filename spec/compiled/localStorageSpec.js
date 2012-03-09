@@ -22,10 +22,10 @@
           return expect(localStorage.setItem).toHaveBeenCalledWith('key', 'value');
         });
       });
-      return describe("delete()", function() {
+      return describe("del()", function() {
         return it("calls through to the removeItem method", function() {
           spyOn(localStorage, 'removeItem');
-          this.store["delete"]('key');
+          this.store.del('key');
           return expect(localStorage.removeItem).toHaveBeenCalledWith('key');
         });
       });

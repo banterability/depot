@@ -18,10 +18,10 @@ describe "LocalStorageWrapper", ->
         @store.set 'key', 'value'
         expect(localStorage.setItem).toHaveBeenCalledWith('key', 'value')
 
-    describe "delete()", ->
+    describe "del()", ->
       it "calls through to the removeItem method", ->
         spyOn localStorage, 'removeItem'
-        @store.delete 'key'
+        @store.del 'key'
         expect(localStorage.removeItem).toHaveBeenCalledWith('key')
 
   describe "converts complex types to & from JSON", ->

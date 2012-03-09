@@ -44,7 +44,7 @@ class LocalStorageWrapper
   decr: (key, decrBy = 1) ->
     @_changeCounter key, (val) -> val - decrBy
 
-  delete: (key) ->
+  del: (key) ->
     @store.removeItem @_buildKey(key)
 
   _buildKey: (key) ->

@@ -34,7 +34,7 @@ Accepts a key and a function that modifies the existing counter value</p>       
   <span class="nv">decr: </span><span class="nf">(key, decrBy = 1) -&gt;</span>
     <span class="nx">@_changeCounter</span> <span class="nx">key</span><span class="p">,</span> <span class="nf">(val) -&gt;</span> <span class="nx">val</span> <span class="o">-</span> <span class="nx">decrBy</span>
 
-  <span class="k">delete</span><span class="o">:</span> <span class="nf">(key) -&gt;</span>
+  <span class="nv">del: </span><span class="nf">(key) -&gt;</span>
     <span class="nx">@store</span><span class="p">.</span><span class="nx">removeItem</span> <span class="nx">@_buildKey</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
 
   <span class="nv">_buildKey: </span><span class="nf">(key) -&gt;</span>
