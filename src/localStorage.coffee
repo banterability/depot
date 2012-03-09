@@ -21,11 +21,28 @@ class LocalStorageWrapper
     @set key, val         # Don't double-wrap key
 
   pop: (key) ->
-    val = @get key || []  # Don't double-wrap key
+    val = @get(key) || []  # Don't double-wrap key
     # Save popped object for return
     poppedObj = val.pop()
     @set key, val         # Don't double-wrap key
     poppedObj
+
+  # Handle counter operations (incr & decr)
+  # Accepts a key and a function that modifies the existing counter value
+  _changeCounter: (key, changeFunc) ->
+    val = @get(key) || 0
+    if typeof val == "number"
+      newVal = changeFunc(val)
+      @set key, newVal
+      newVal
+    else
+      throw "Cannot perform counter operation on a non-number"
+
+  incr: (key, incrBy = 1) ->
+    @_changeCounter key, (val) -> val + incrBy
+
+  decr: (key, decrBy = 1) ->
+    @_changeCounter key, (val) -> val - decrBy
 
   delete: (key) ->
     @store.removeItem @_buildKey(key)

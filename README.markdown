@@ -22,6 +22,17 @@ A wrapper around the [window.localStorage API][1].
     // 'numbers' = [1, 2, 3, 4]
     ```
 
+- Simple counters
+
+    ```javascript
+    store.incr('visitors')
+    -> 1
+
+    // 'bottles_of_beer_on_the_wall' = 99
+    store.decr('bottles_of_beer_on_the_wall', 3)
+    -> 96
+    ```
+
 - Key prefixing:
 
     ```javascript

@@ -1,4 +1,5 @@
 (function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   beforeEach(function() {
     this.store = new LocalStorageWrapper;
     return window.localStorage.clear();
@@ -82,7 +83,7 @@
         });
       });
     });
-    return describe("key prefixing", function() {
+    describe("key prefixing", function() {
       it("prepends a string to keys if initalized with a prefix", function() {
         this.store = new LocalStorageWrapper("prefix");
         spyOn(localStorage, 'getItem');
@@ -95,6 +96,66 @@
         spyOn(JSON, 'parse').andReturn("foo");
         this.store.get('key');
         return expect(localStorage.getItem).toHaveBeenCalledWith('key');
+      });
+    });
+    return describe("counters", function() {
+      describe("incr()", function() {
+        it("increments a counter and returns value", function() {
+          var resp;
+          this.store.set('existingCounter', 1);
+          resp = this.store.incr('existingCounter');
+          expect(resp).toEqual(2);
+          return expect(this.store.get('existingCounter')).toEqual(2);
+        });
+        it("creates a counter if key is not defined and returns", function() {
+          var resp;
+          resp = this.store.incr('undefinedCounter');
+          expect(resp).toEqual(1);
+          return expect(this.store.get('undefinedCounter')).toEqual(1);
+        });
+        it("throws an error if a non-integer value exists for key", function() {
+          this.store.set('nonCounter', "foo");
+          expect(__bind(function() {
+            return this.store.incr('nonCounter');
+          }, this)).toThrow('Cannot perform counter operation on a non-number');
+          return expect(this.store.get('nonCounter')).toEqual("foo");
+        });
+        return it("increments by a specified value", function() {
+          var resp;
+          this.store.set('existingCounter', 1);
+          resp = this.store.incr('existingCounter', 9);
+          expect(resp).toEqual(10);
+          return expect(this.store.get('existingCounter')).toEqual(10);
+        });
+      });
+      return describe("decr()", function() {
+        it("decrement a counter and returns value", function() {
+          var resp;
+          this.store.set('existingCounter', 2);
+          resp = this.store.decr('existingCounter');
+          expect(resp).toEqual(1);
+          return expect(this.store.get('existingCounter')).toEqual(1);
+        });
+        it("creates a counter if key is not defined and returns", function() {
+          var resp;
+          resp = this.store.decr('undefinedCounter');
+          expect(resp).toEqual(-1);
+          return expect(this.store.get('undefinedCounter')).toEqual(-1);
+        });
+        it("throws an error if a non-integer value exists for key", function() {
+          this.store.set('nonCounter', "foo");
+          expect(__bind(function() {
+            return this.store.decr('nonCounter');
+          }, this)).toThrow('Cannot perform counter operation on a non-number');
+          return expect(this.store.get('nonCounter')).toEqual("foo");
+        });
+        return it("decrement by a specified value", function() {
+          var resp;
+          this.store.set('existingCounter', 10);
+          resp = this.store.decr('existingCounter', 9);
+          expect(resp).toEqual(1);
+          return expect(this.store.get('existingCounter')).toEqual(1);
+        });
       });
     });
   });

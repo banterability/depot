@@ -16,9 +16,23 @@ Encodes native objects to JSON before storing</p>             </td>             
     <span class="nx">@set</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">val</span>         <span class="c1"># Don&#39;t double-wrap key</span>
 
   <span class="nv">pop: </span><span class="nf">(key) -&gt;</span>
-    <span class="nv">val = </span><span class="nx">@get</span> <span class="nx">key</span> <span class="o">||</span> <span class="p">[]</span>  <span class="c1"># Don&#39;t double-wrap key</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Save popped object for return</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">poppedObj = </span><span class="nx">val</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+    <span class="nv">val = </span><span class="nx">@get</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">||</span> <span class="p">[]</span>  <span class="c1"># Don&#39;t double-wrap key</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Save popped object for return</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">poppedObj = </span><span class="nx">val</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
     <span class="nx">@set</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">val</span>         <span class="c1"># Don&#39;t double-wrap key</span>
-    <span class="nx">poppedObj</span>
+    <span class="nx">poppedObj</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Handle counter operations (incr &amp; decr)
+Accepts a key and a function that modifies the existing counter value</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">_changeCounter: </span><span class="nf">(key, changeFunc) -&gt;</span>
+    <span class="nv">val = </span><span class="nx">@get</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">val</span> <span class="o">==</span> <span class="s2">&quot;number&quot;</span>
+      <span class="nv">newVal = </span><span class="nx">changeFunc</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+      <span class="nx">@set</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">newVal</span>
+      <span class="nx">newVal</span>
+    <span class="k">else</span>
+      <span class="k">throw</span> <span class="s2">&quot;Cannot perform counter operation on a non-number&quot;</span>
+
+  <span class="nv">incr: </span><span class="nf">(key, incrBy = 1) -&gt;</span>
+    <span class="nx">@_changeCounter</span> <span class="nx">key</span><span class="p">,</span> <span class="nf">(val) -&gt;</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">incrBy</span>
+
+  <span class="nv">decr: </span><span class="nf">(key, decrBy = 1) -&gt;</span>
+    <span class="nx">@_changeCounter</span> <span class="nx">key</span><span class="p">,</span> <span class="nf">(val) -&gt;</span> <span class="nx">val</span> <span class="o">-</span> <span class="nx">decrBy</span>
 
   <span class="k">delete</span><span class="o">:</span> <span class="nf">(key) -&gt;</span>
     <span class="nx">@store</span><span class="p">.</span><span class="nx">removeItem</span> <span class="nx">@_buildKey</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>

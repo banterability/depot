@@ -78,3 +78,50 @@ describe "LocalStorageWrapper", ->
       spyOn(JSON, 'parse').andReturn("foo")
       @store.get 'key'
       expect(localStorage.getItem).toHaveBeenCalledWith('key')
+
+  describe "counters", ->
+    describe "incr()", ->
+      it "increments a counter and returns value" , ->
+        @store.set 'existingCounter', 1
+        resp = @store.incr 'existingCounter'
+        expect(resp).toEqual 2
+        expect(@store.get 'existingCounter').toEqual 2
+
+      it "creates a counter if key is not defined and returns", ->
+        resp = @store.incr 'undefinedCounter'
+        expect(resp).toEqual 1
+        expect(@store.get 'undefinedCounter').toEqual 1
+
+      it "throws an error if a non-integer value exists for key", ->
+        @store.set 'nonCounter', "foo"
+        expect(=> @store.incr 'nonCounter').toThrow('Cannot perform counter operation on a non-number')
+        expect(@store.get 'nonCounter').toEqual "foo"
+
+      it "increments by a specified value", ->
+        @store.set 'existingCounter', 1
+        resp = @store.incr 'existingCounter', 9
+        expect(resp).toEqual 10
+        expect(@store.get 'existingCounter').toEqual 10
+
+    describe "decr()", ->
+      it "decrement a counter and returns value" , ->
+        @store.set 'existingCounter', 2
+        resp = @store.decr 'existingCounter'
+        expect(resp).toEqual 1
+        expect(@store.get 'existingCounter').toEqual 1
+
+      it "creates a counter if key is not defined and returns", ->
+        resp = @store.decr 'undefinedCounter'
+        expect(resp).toEqual -1
+        expect(@store.get 'undefinedCounter').toEqual -1
+
+      it "throws an error if a non-integer value exists for key", ->
+        @store.set 'nonCounter', "foo"
+        expect(=> @store.decr 'nonCounter').toThrow('Cannot perform counter operation on a non-number')
+        expect(@store.get 'nonCounter').toEqual "foo"
+
+      it "decrement by a specified value", ->
+        @store.set 'existingCounter', 10
+        resp = @store.decr 'existingCounter', 9
+        expect(resp).toEqual 1
+        expect(@store.get 'existingCounter').toEqual 1
