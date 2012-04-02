@@ -1,0 +1,123 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>localStorageWrapper</title>
+  <meta name="description" content="A wrapper around the window.localStorage API supporting non-string types &amp; convenience methods like pop &amp; push.">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">localStorageWrapper</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">A wrapper around the window.localStorage API supporting non-string types &amp; convenience methods like pop &amp; push.</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/banterability/localStorageWrapper/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/banterability/localStorageWrapper/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/banterability/localStorageWrapper" class="code">fork localStorageWrapper on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>localStorageWrapper</h1>
+
+<p>A wrapper around the <a href="http://dev.w3.org/html5/webstorage/#storage">window.localStorage API</a>.</p>
+
+<h2>Features</h2>
+
+<ul>
+<li>
+<p>Support for non-string values:</p>
+
+<div class="highlight">
+<pre><span class="nx">store</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'album'</span><span class="p">,</span> <span class="p">{</span><span class="nx">album</span><span class="o">:</span> <span class="s2">"Mass Romantic"</span><span class="p">,</span> <span class="nx">band</span><span class="o">:</span> <span class="s2">"The New Pornographers"</span><span class="p">,</span> <span class="nx">year</span><span class="o">:</span> <span class="mi">2000</span><span class="p">});</span>
+</pre>
+</div>
+</li>
+<li>
+<p>Array methods like pop &amp; push:</p>
+
+<div class="highlight">
+<pre><span class="nx">store</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'numbers'</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]);</span>
+
+<span class="nx">store</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">'numbers'</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="c1">// 'numbers' = [1, 2, 3, 4, 5]</span>
+
+<span class="nx">store</span><span class="p">.</span><span class="nx">pop</span><span class="p">(</span><span class="s1">'numbers'</span><span class="p">)</span>
+<span class="o">-&gt;</span> <span class="mi">5</span>
+<span class="c1">// 'numbers' = [1, 2, 3, 4]</span>
+</pre>
+</div>
+</li>
+<li>
+<p>Simple counters:</p>
+
+<div class="highlight">
+<pre><span class="nx">store</span><span class="p">.</span><span class="nx">incr</span><span class="p">(</span><span class="s1">'visitors'</span><span class="p">)</span>
+<span class="o">-&gt;</span> <span class="mi">1</span>
+
+<span class="c1">// 'bottles_of_beer_on_the_wall' = 99</span>
+<span class="nx">store</span><span class="p">.</span><span class="nx">decr</span><span class="p">(</span><span class="s1">'bottles_of_beer_on_the_wall'</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="o">-&gt;</span> <span class="mi">96</span>
+</pre>
+</div>
+</li>
+<li>
+<p>Key prefixing:</p>
+
+<div class="highlight">
+<pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">LocalStorageWrapper</span><span class="p">(</span><span class="s1">'myapp'</span><span class="p">);</span>
+<span class="nx">value</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'username'</span><span class="p">);</span>
+<span class="c1">// same as: window.localStorage.getItem('myapp:username');</span>
+</pre>
+</div>
+</li>
+</ul><h2>To-do</h2>
+
+<ul>
+<li>Feature detection</li>
+<li>Left-side methods on arrays (shift, unshift)</li>
+</ul><h2>
+<em>Not</em> to-do</h2>
+
+<ul>
+<li>localStorage emulation (via cookies, etc.)</li>
+</ul>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/banterability" class="avatar"><img src="https://secure.gravatar.com/avatar/27fe5be2e3eb466e4f6c2ea52a2efe1b?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png" width="48" height="48"/></a> <a href="https://github.com/banterability">banterability</a> maintains <a href="https://github.com/banterability/localStorageWrapper">localStorageWrapper</a></p>
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/banterability/localStorageWrapper/tarball/master" class="tar">tar</a><a href="https://github.com/banterability/localStorageWrapper/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>
