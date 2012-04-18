@@ -67,7 +67,7 @@ describe "Depot", ->
 
   describe "key prefixing", ->
     it "prepends a string to keys if initalized with a prefix", ->
-      @store = new LocalStorageWrapper "prefix"
+      @store = new Depot "prefix"
       spyOn localStorage, 'getItem'
       spyOn(JSON, 'parse').andReturn("foo")
       @store.get 'key'

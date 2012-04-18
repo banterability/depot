@@ -85,7 +85,7 @@
     });
     describe("key prefixing", function() {
       it("prepends a string to keys if initalized with a prefix", function() {
-        this.store = new LocalStorageWrapper("prefix");
+        this.store = new Depot("prefix");
         spyOn(localStorage, 'getItem');
         spyOn(JSON, 'parse').andReturn("foo");
         this.store.get('key');
