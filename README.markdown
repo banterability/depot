@@ -1,4 +1,4 @@
-# localStorageWrapper
+# Depot
 
 A wrapper around the [window.localStorage API][1].
 
@@ -36,7 +36,7 @@ A wrapper around the [window.localStorage API][1].
 - Key prefixing:
 
     ```javascript
-    var store = new LocalStorageWrapper('myapp');
+    var store = new Depot('myapp');
     value = store.get('username');
     // same as: window.localStorage.getItem('myapp:username');
     ```

@@ -1,6 +1,6 @@
 root = exports ? this
 
-class LocalStorageWrapper
+class Depot
   constructor: (prefix = null)->
     @store = window.localStorage
     @prefix = prefix
@@ -53,4 +53,4 @@ class LocalStorageWrapper
     else
       key
 
-root.LocalStorageWrapper = LocalStorageWrapper
+root.Depot = Depot

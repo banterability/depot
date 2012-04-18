@@ -1,11 +1,11 @@
 {spawn, exec} = require 'child_process'
 
-task 'build', 'build localStorageWrapper (lib, tests & docs)', ->
+task 'build', 'build depot (lib, tests & docs)', ->
   invoke 'build:lib'
   invoke 'build:tests'
   invoke 'build:docs'
 
-task 'build:lib', 'build the localStorageWrapper library', ->
+task 'build:lib', 'build the depot library', ->
   console.log "Building app..."
   runner 'coffee', ['-c', '-o', 'lib', 'src']
 
@@ -15,7 +15,7 @@ task 'build:tests', 'build Jasmine tests', ->
 
 task 'build:docs', 'rebuild documentation with Docco', ->
   console.log "Building documentation..."
-  runner 'docco', ['src/localStorage.coffee']
+  runner 'docco', ['src/depot.coffee']
 
 task 'test', 'run Jasmine tests', ->
   runner 'open', ['spec/SpecRunner.html']

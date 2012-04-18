@@ -1,8 +1,8 @@
 beforeEach ->
-  @store = new LocalStorageWrapper
+  @store = new Depot
   window.localStorage.clear()
 
-describe "LocalStorageWrapper", ->
+describe "Depot", ->
   describe "wraps window.localStorage methods", ->
     describe "get()", ->
       it "calls through to the getItem method", ->
