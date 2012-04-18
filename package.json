@@ -1,0 +1,17 @@
+{
+  "author": "Jeff Long (http://jeffreylong.org/)",
+  "name": "depot",
+  "description": "A wrapper around the window.localStorage API supporting non-string types & convenience methods like pop & push.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/banterability/depot",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/banterability/depot.git"
+  },
+  "engines": {
+    "node": "~0.6.9"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {}
+}
