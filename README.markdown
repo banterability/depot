@@ -2,6 +2,8 @@
 
 A wrapper around the [window.localStorage API][1].
 
+[![Build Status](https://secure.travis-ci.org/banterability/depot.png)](http://travis-ci.org/banterability/depot)
+
 ## Features
 - Support for non-string values:
 
@@ -13,10 +15,10 @@ A wrapper around the [window.localStorage API][1].
 
     ```javascript
     store.set('numbers', [1, 2, 3, 4]);
-    
+
     store.push('numbers', 5)
     // 'numbers' = [1, 2, 3, 4, 5]
-    
+
     store.pop('numbers')
     -> 5
     // 'numbers' = [1, 2, 3, 4]
