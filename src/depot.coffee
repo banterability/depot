@@ -9,7 +9,7 @@ class Depot
   # Decodes value from JSON to support native objects
   get: (key) ->
     JSON.parse @store.getItem @_buildKey(key)
-  
+
   # Wraps window.localStorage.setItem
   # Encodes native objects to JSON before storing
   set: (key, obj) ->

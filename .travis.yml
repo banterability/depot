@@ -1,0 +1,5 @@
+language: node_js
+node_js:
+  - 0.8
+  - 0.6
+script: phantomjs spec/support/run-tests.coffee spec/SpecRunner.html

@@ -4,11 +4,12 @@
 <head>
   <title>Jasmine Test Runner</title>
 
-  <link rel="shortcut icon" type="image/png" href="support/jasmine-1.1.0/jasmine_favicon.png">
-  <link rel="stylesheet" type="text/css" href="support/jasmine-1.1.0/jasmine.css">
+  <link rel="shortcut icon" type="image/png" href="support/jasmine-1.2.0/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="support/jasmine-1.2.0/jasmine.css">
 
-  <script type="text/javascript" src="support/jasmine-1.1.0/jasmine.js"></script>
-  <script type="text/javascript" src="support/jasmine-1.1.0/jasmine-html.js"></script>
+  <script type="text/javascript" src="support/jasmine-1.2.0/jasmine.js"></script>
+  <script type="text/javascript" src="support/jasmine-1.2.0/jasmine-html.js"></script>
+  <script type="text/javascript" src="support/console-runner.js"></script>
 
   <!-- include source files here... -->
   <script type="text/javascript" src="../lib/depot.js"></script>
@@ -20,7 +21,9 @@
 <body>
 
 <script type="text/javascript">
+  var console_reporter = new jasmine.ConsoleReporter()
   jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+  jasmine.getEnv().addReporter(console_reporter);
   jasmine.getEnv().execute();
 </script>
 
