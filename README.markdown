@@ -2,7 +2,7 @@
 
 A wrapper around the [window.localStorage API][1].
 
-[![Build Status](https://secure.travis-ci.org/banterability/depot.png)](http://travis-ci.org/banterability/depot)
+[![Build Status](https://secure.travis-ci.org/banterability/depot.png?branch=master)](http://travis-ci.org/banterability/depot)
 
 ## Features
 - Support for non-string values:
