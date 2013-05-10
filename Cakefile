@@ -7,18 +7,18 @@ task 'build', 'build depot (lib, tests & docs)', ->
 
 task 'build:lib', 'build the depot library', ->
   console.log "Building app..."
-  runner 'coffee', ['-c', '-o', 'lib', 'src']
+  runner 'coffee', ['-c', '-o', 'build', 'src']
 
-task 'build:tests', 'build Jasmine tests', ->
+task 'build:tests', 'build the tests', ->
   console.log "Building tests..."
-  runner 'coffee', ['-c', '-o', 'spec/compiled', 'spec']
+  runner 'coffee', ['-c', '-o', 'test/build', 'test/src']
 
-task 'build:docs', 'rebuild documentation with Docco', ->
+task 'build:docs', 'build documentation with Docco', ->
   console.log "Building documentation..."
   runner 'docco', ['src/depot.coffee']
 
-task 'test', 'run Jasmine tests', ->
-  runner 'open', ['spec/SpecRunner.html']
+task 'test', 'run tests in browser', ->
+  runner 'open', ['test/mocha.html']
 
 runner = (cmd, args) ->
   worker = spawn cmd, args

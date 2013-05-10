@@ -1,0 +1,35 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="vendor/mocha.css" />
+</head>
+<body>
+  <div id="mocha"></div>
+
+  <!-- test libraries -->
+  <script src="vendor/mocha.js"></script>
+  <script src="vendor/chai.js"></script>
+  <script>
+    var should = chai.should();
+    mocha.setup('bdd')
+    mocha.checkLeaks();
+  </script>
+
+  <!-- library -->
+  <script src="../build/depot.js"></script>
+
+  <!-- tests -->
+  <script src="build/depot.js"></script>
+
+  <script>
+
+    // mocha.globals(['jQuery']);
+    if (window.mochaPhantomJS) {
+      mochaPhantomJS.run();
+    } else {
+      mocha.run();
+    }
+  </script>
+</body>
+</html>
