@@ -15,7 +15,7 @@ task 'build:tests', 'build the tests', ->
 
 task 'build:docs', 'build documentation with Docco', ->
   console.log "Building documentation..."
-  runner 'docco', ['src/depot.coffee']
+  runner 'docco', ['src/depot.litcoffee']
 
 task 'test', 'run tests in browser', ->
   runner 'open', ['test/mocha.html']

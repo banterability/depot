@@ -1,72 +1,303 @@
-<!DOCTYPE html>  <html> <head>   <title>depot.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               depot.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">Depot</span>
-  <span class="nv">constructor: </span><span class="nf">(options) -&gt;</span>
-    <span class="nx">@checkDependencies</span><span class="p">()</span>
+<!DOCTYPE html>
 
-    <span class="vi">@vent = </span><span class="p">{}</span>
-    <span class="vi">@store = </span><span class="nb">window</span><span class="p">.</span><span class="nx">localStorage</span>
-    <span class="vi">@keyPrefix = </span><span class="nx">options</span><span class="o">?</span><span class="p">.</span><span class="nx">prefix</span>
+<html>
+<head>
+  <title>depot.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>depot.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p><strong>Depot</strong></p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">Depot</span></span>
+  constructor: (options) -&gt;
+    <span class="property">@checkDependencies</span>()
+    <span class="property">@vent</span> = {}
+    <span class="property">@store</span> = window.localStorage
+    <span class="property">@keyPrefix</span> = options?.prefix</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Depot requires browser support for the HTML5 localStorage API and JSON encoding/decoding. If either is missing, throw an error.</p>
 
-  <span class="nv">checkDependencies: </span><span class="nf">-&gt;</span>
-    <span class="k">throw</span> <span class="s">&quot;[Depot]: JSON library required&quot;</span> <span class="k">unless</span> <span class="nx">JSON</span>
-    <span class="k">throw</span> <span class="s">&quot;[Depot]: Browser requires window.localStorage support&quot;</span> <span class="k">unless</span> <span class="nb">window</span><span class="p">.</span><span class="nx">localStorage</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Core methods (get, set, delete)</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">get: </span><span class="nf">(key) -&gt;</span>
-    <span class="nx">@_decode</span> <span class="nx">@store</span><span class="p">.</span><span class="nx">getItem</span> <span class="nx">@_buildKey</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  checkDependencies: -&gt;
+    <span class="keyword">throw</span> <span class="string">"[Depot]: Browser requires window.localStorage support"</span> <span class="keyword">unless</span> window.localStorage
+    <span class="keyword">throw</span> <span class="string">"[Depot]: JSON library required"</span> <span class="keyword">unless</span> JSON?.stringify <span class="keyword">and</span> JSON?.parse</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h2>Basic key methods</h2>
+<p><strong>get:</strong> Get a value from the store by key</p>
 
-  <span class="nv">set: </span><span class="nf">(key, data, options = {}) -&gt;</span>
-    <span class="nv">fullKey = </span><span class="nx">@_buildKey</span> <span class="nx">key</span>
-    <span class="nx">@store</span><span class="p">.</span><span class="nx">setItem</span> <span class="nx">fullKey</span><span class="p">,</span> <span class="nx">@_encode</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-    <span class="nx">@_fireEvent</span> <span class="s">&#39;keyChanged&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">key: </span><span class="nx">fullKey</span><span class="p">,</span> <span class="nv">operation: </span><span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">data</span><span class="p">}</span> <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">suppressEvent</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  get: (key) -&gt;
+    <span class="property">@_decode</span> <span class="property">@store</span>.getItem <span class="property">@_buildKey</span>(key)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><strong>set:</strong> Store a value in the store at a specified key.</p>
+<p>Accepts an optional <em>options</em> object with the following valid values:</p>
+<ul>
+<li><code>suppressEvent: true</code>: Prevents <code>set</code> from firing an event. This is used by higher level methods that perform complex operations, but rely on <code>set</code> to actually interact with the store.</li>
+</ul>
+<p>Optional</p>
 
-  <span class="nv">del: </span><span class="nf">(key) -&gt;</span>
-    <span class="nv">fullKey = </span><span class="nx">@_buildKey</span> <span class="nx">key</span>
-    <span class="nx">@store</span><span class="p">.</span><span class="nx">removeItem</span> <span class="nx">fullKey</span>
-    <span class="nx">@_fireEvent</span> <span class="s">&#39;keyDeleted&#39;</span><span class="p">,</span> <span class="nv">key: </span><span class="nx">fullKey</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h1>Array methods</h1>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">push: </span><span class="nf">(key, data) -&gt;</span>
-    <span class="nv">value = </span><span class="nx">@get</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">||</span> <span class="p">[]</span>
-    <span class="nx">value</span><span class="p">.</span><span class="nx">push</span> <span class="nx">data</span>
-    <span class="nx">@set</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>todo: fire eevent</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">pop: </span><span class="nf">(key) -&gt;</span>
-    <span class="nv">value = </span><span class="nx">@get</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">||</span> <span class="p">[]</span>
-    <span class="nv">poppedData = </span><span class="nx">value</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
-    <span class="nx">@set</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>todo: fire event</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">poppedData</span> <span class="c1"># Return popped object</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>set: (key, data, options = {}) -&gt;
+  fullKey = <span class="property">@_buildKey</span> key
+  <span class="property">@store</span>.setItem fullKey, <span class="property">@_encode</span>(data)
+  <span class="property">@_fireEvent</span> <span class="string">'keyChanged'</span>, {key: fullKey, operation: <span class="string">'set'</span>, value: data} <span class="keyword">unless</span> options.suppressEvent</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><strong>del:</strong> Remove a value from the store by key</p>
 
-  <span class="nv">len: </span><span class="nf">(key) -&gt;</span>
-    <span class="nv">value = </span><span class="nx">@get</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">||</span> <span class="p">[]</span>
-    <span class="nx">value</span><span class="p">.</span><span class="nx">length</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h1>Counter methods</h1>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">incr: </span><span class="nf">(key, incrBy = 1) -&gt;</span>
-    <span class="nv">newValue = </span><span class="nx">@_modifyCounter</span> <span class="nx">key</span><span class="p">,</span> <span class="nf">(val) -&gt;</span> <span class="nx">val</span> <span class="o">+</span> <span class="nx">incrBy</span>
-    <span class="nx">@_fireEvent</span> <span class="s">&#39;keyChanged&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">key: </span><span class="nx">@_buildKey</span><span class="p">(</span><span class="nx">key</span><span class="p">),</span> <span class="nv">operation: </span><span class="s">&#39;incr&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">newValue</span><span class="p">}</span>
-    <span class="nx">newValue</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  del: (key) -&gt;
+    fullKey = <span class="property">@_buildKey</span> key
+    <span class="property">@store</span>.removeItem fullKey
+    <span class="property">@_fireEvent</span> <span class="string">'keyDeleted'</span>, key: fullKey</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h2>Array methods</h2>
 
-  <span class="nv">decr: </span><span class="nf">(key, decrBy = 1) -&gt;</span>
-    <span class="nv">newValue = </span><span class="nx">@_modifyCounter</span> <span class="nx">key</span><span class="p">,</span> <span class="nf">(val) -&gt;</span> <span class="nx">val</span> <span class="o">-</span> <span class="nx">decrBy</span>
-    <span class="nx">@_fireEvent</span> <span class="s">&#39;keyChanged&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nv">key: </span><span class="nx">@_buildKey</span><span class="p">(</span><span class="nx">key</span><span class="p">),</span> <span class="nv">operation: </span><span class="s">&#39;decr&#39;</span><span class="p">,</span> <span class="nv">value: </span><span class="nx">newValue</span><span class="p">}</span>
-    <span class="nx">newValue</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  push: (key, data) -&gt;
+    value = <span class="property">@get</span>(key) || []
+    value.push data
+    <span class="property">@set</span> key, value</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>todo: fire eevent</p>
 
-  <span class="nv">_modifyCounter: </span><span class="nf">(key, changeFunction) -&gt;</span>
-    <span class="nv">currentValue = </span><span class="nx">@get</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">||</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">currentValue</span> <span class="o">==</span> <span class="s">&quot;number&quot;</span>
-      <span class="nv">newValue = </span><span class="nx">changeFunction</span><span class="p">(</span><span class="nx">currentValue</span><span class="p">)</span>
-      <span class="nx">@set</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">newValue</span><span class="p">,</span> <span class="nv">suppressEvent: </span><span class="kc">true</span>
-      <span class="nx">newValue</span>
-    <span class="k">else</span>
-      <span class="k">throw</span> <span class="s">&quot;Cannot perform counter operation on non-number&quot;</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h1>Encoding/decoding</h1>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  pop: (key) -&gt;
+    value = <span class="property">@get</span>(key) || []
+    poppedData = value.pop()
+    <span class="property">@set</span> key, value</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>todo: fire event</p>
 
-<p>Allows native object storage by converting everything to JSON</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">_encode: </span><span class="nf">(data) -&gt;</span>
-    <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span> <span class="nx">data</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    poppedData <span class="comment"># Return popped object</span>
 
-  <span class="nv">_decode: </span><span class="nf">(data) -&gt;</span>
-    <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">data</span>
+  len: (key) -&gt;
+    value = <span class="property">@get</span>(key) || []
+    value.length</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h2>Counter methods</h2>
 
-  <span class="nv">_buildKey: </span><span class="nf">(key) -&gt;</span>
-    <span class="k">if</span> <span class="nx">@_isArray</span> <span class="nx">key</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>Allows keys to be built from arrays of components: <code>['blog', 'entries', '07may'] =&gt; 'blog:entries:07may'</code></p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">key</span><span class="p">.</span><span class="nx">unshift</span> <span class="nx">@keyPrefix</span> <span class="k">if</span> <span class="nx">@keyPrefix</span>
-      <span class="nx">key</span><span class="p">.</span><span class="nx">join</span> <span class="s">&quot;:&quot;</span>
-    <span class="k">else</span>
-      <span class="k">return</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@keyPrefix</span><span class="si">}</span><span class="s">:</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span> <span class="k">if</span> <span class="nx">@keyPrefix</span>
-      <span class="nx">key</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h1>Utility methods</h1>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">_fireEvent: </span><span class="nf">(eventName, detail) -&gt;</span>
-    <span class="nv">detail.eventType = </span><span class="nx">eventName</span>
-    <span class="nv">e = </span><span class="k">new</span> <span class="nx">CustomEvent</span> <span class="s">&#39;depot:keyEvent&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">detail</span><span class="p">}</span>
-    <span class="nb">window</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>Lifted from Underscore.js</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">_isArray: </span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="o">||</span> <span class="nf">(obj) -&gt;</span>
-    <span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;[object Array]&#39;</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  incr: (key, incrBy = <span class="number">1</span>) -&gt;
+    newValue = <span class="property">@_modifyCounter</span> key, (val) -&gt; val + incrBy
+    <span class="property">@_fireEvent</span> <span class="string">'keyChanged'</span>, {key: <span class="property">@_buildKey</span>(key), operation: <span class="string">'incr'</span>, value: newValue}
+    newValue
 
-  <span class="nv">remainingSpace: </span><span class="nf">-&gt;</span>
-    <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">-</span> <span class="nx">unescape</span><span class="p">(</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">@store</span><span class="p">))).</span><span class="nx">length</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>Attach to <code>window</code> object</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="vi">@Depot = </span><span class="nx">Depot</span>
+  decr: (key, decrBy = <span class="number">1</span>) -&gt;
+    newValue = <span class="property">@_modifyCounter</span> key, (val) -&gt; val - decrBy
+    <span class="property">@_fireEvent</span> <span class="string">'keyChanged'</span>, {key: <span class="property">@_buildKey</span>(key), operation: <span class="string">'decr'</span>, value: newValue}
+    newValue
 
-</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
+  _modifyCounter: (key, changeFunction) -&gt;
+    currentValue = <span class="property">@get</span>(key) || <span class="number">0</span>
+    <span class="keyword">if</span> <span class="keyword">typeof</span> currentValue == <span class="string">"number"</span>
+      newValue = changeFunction(currentValue)
+      <span class="property">@set</span> key, newValue, suppressEvent: <span class="literal">true</span>
+      newValue
+    <span class="keyword">else</span>
+      <span class="keyword">throw</span> <span class="string">"Cannot perform counter operation on non-number"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h2>Encoding/decoding</h2>
+<p>Allows native object storage by converting everything to JSON</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _encode: (data) -&gt;
+    JSON.stringify data
+
+  _decode: (data) -&gt;
+    JSON.parse data</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h2>Key manipulation</h2>
+<p>Supports the creation of a key from an array of parts:</p>
+<p><code>[&#39;blog&#39;, &#39;entries&#39;, &#39;07may&#39;] =&gt; &#39;blog:entries:07may&#39;</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _buildKey: (key) -&gt;
+    <span class="keyword">if</span> <span class="property">@_isArray</span> key
+      key.unshift <span class="property">@keyPrefix</span> <span class="keyword">if</span> <span class="property">@keyPrefix</span>
+      key.join <span class="string">":"</span>
+    <span class="keyword">else</span>
+      <span class="keyword">return</span> <span class="string">"<span class="subst">#{@keyPrefix}</span>:<span class="subst">#{key}</span>"</span> <span class="keyword">if</span> <span class="property">@keyPrefix</span>
+      key</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h2>Utility methods</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _fireEvent: (eventName, detail) -&gt;
+    detail.eventType = eventName
+    e = <span class="keyword">new</span> CustomEvent <span class="string">'depot:keyEvent'</span>, {detail}
+    window.dispatchEvent(e)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Lifted from Underscore.js</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  _isArray: Array.isArray || (obj) -&gt;
+    toString.call(obj) == <span class="string">'[object Array]'</span>
+
+  remainingSpace: -&gt;
+    <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">5</span> - unescape(encodeURIComponent(JSON.stringify(<span class="property">@store</span>))).length</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Attach <strong>Depot</strong> to the <code>window</code> object for access in browser.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="property">@Depot</span> = Depot</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
