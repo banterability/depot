@@ -97,6 +97,10 @@ Treat [window.localStorage][1] more like [Redis][2]
     // same as: window.localStorage.getItem('myapp:username');
     ```
 
+## Events API
+
+- Documentation to come
+
 ## Non-features
 
 - Doesn't emulate localStorage for older browsers (and never will)
@@ -105,7 +109,7 @@ Treat [window.localStorage][1] more like [Redis][2]
 
 - Feature detection
 - Left-side methods on arrays (shift, unshift)
-
+- Subscribe to changes on a single key
 
 [1]: http://dev.w3.org/html5/webstorage/#storage
 [2]: http://redis.io/commands
