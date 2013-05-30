@@ -2,45 +2,40 @@
 
 Manages events that occur internally. Heavily inspired by an internal events framework 
 
-    class Vent
-      constructor: ->
-        @listeners = {"*": []}
+    #class Vent
+    #  constructor: ->
+    #    @listeners = {"*": []}
 
-      on: (key, callback) ->
-        @listeners[key] ?= []
-        @listeners[key].push callback
+    #  on: (key, callback) ->
+    #    @listeners[key] ?= []
+    #    @listeners[key].push callback
 
-      off: (key, callback) ->
-        @listeners[key].splice(index, 1) for index, value of @listeners[key] when value is callback
+    #  off: (key, callback) ->
+    #    @listeners[key].splice(index, 1) for index, value of @listeners[key] when value is callback
 
-      emit: (key, args...) ->
-        @listeners[key] ?= []
-        callback(args...) for callback in @listeners[key]
-        callback(key, args...) for callback in @listeners["*"]
+    #  emit: (key, args...) ->
+    #    @listeners[key] ?= []
+    #    callback(args...) for callback in @listeners[key]
+    #    callback(key, args...) for callback in @listeners["*"]
 
-class DepotEvents
-
-  emit: (key, args...) ->
-    console.log "Emiting event #{key} with payload", args...
-    @_splitKeyAndBubble(key, args...) if key.indexOf(":") != -1
-
-  _splitKeyAndBubble: (key, args...) ->
-    keyParts = key.split(":")
-    args.bubbled = keyParts.pop()
-    nextKey = keyParts.join(":")
-    @emit nextKey, args...
-
-
-
-
-
+    #class DepotEvents
+    #
+    #  emit: (key, args...) ->
+    #    console.log "Emiting event #{key} with payload", args...
+    #    @_splitKeyAndBubble(key, args...) if key.indexOf(":") != -1
+    #
+    #  _splitKeyAndBubble: (key, args...) ->
+    #    keyParts = key.split(":")
+    #    args.bubbled = keyParts.pop()
+    #    nextKey = keyParts.join(":")
+    #    @emit nextKey, args...
 
 **Depot**
 
     class Depot
       constructor: (options) ->
         @checkDependencies()
-        @vent = new Vent
+        # @vent = new Vent
         @store = window.localStorage
         @keyPrefix = options?.prefix
 
@@ -66,10 +61,10 @@ Accepts an optional *options* object with the following valid values:
 
 Optional
 
-    set: (key, data, options = {}) ->
-      fullKey = @_buildKey key
-      @store.setItem fullKey, @_encode(data)
-      @_fireEvent 'keyChanged', {key: fullKey, operation: 'set', value: data} unless options.suppressEvent
+      set: (key, data, options = {}) ->
+        fullKey = @_buildKey key
+        @store.setItem fullKey, @_encode(data)
+        @_fireEvent 'keyChanged', {key: fullKey, operation: 'set', value: data} unless options.suppressEvent
 
 **del:** Remove a value from the store by key
 
@@ -132,7 +127,6 @@ Allows native object storage by converting everything to JSON
 
 Supports the creation of a key from an array of parts:
 
-
 ```['blog', 'entries', '07may'] => 'blog:entries:07may'```
 
       _buildKey: (key) ->
@@ -146,9 +140,10 @@ Supports the creation of a key from an array of parts:
 ## Utility methods
 
       _fireEvent: (eventName, detail) ->
-        detail.eventType = eventName
-        e = new CustomEvent 'depot:keyEvent', {detail}
-        window.dispatchEvent(e)
+        # detail.eventType = eventName
+        # e = {'hey'}
+        # e = new CustomEvent 'depot:keyEvent', {detail} // doesn't work with phantom apparently
+        # window.dispatchEvent(e)
 
       # Lifted from Underscore.js
       _isArray: Array.isArray || (obj) ->

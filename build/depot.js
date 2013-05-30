@@ -5,7 +5,6 @@
   Depot = (function() {
     function Depot(options) {
       this.checkDependencies();
-      this.vent = {};
       this.store = window.localStorage;
       this.keyPrefix = options != null ? options.prefix : void 0;
     }
@@ -23,12 +22,7 @@
       return this._decode(this.store.getItem(this._buildKey(key)));
     };
 
-    return Depot;
-
-  })();
-
-  ({
-    set: function(key, data, options) {
+    Depot.prototype.set = function(key, data, options) {
       var fullKey;
 
       if (options == null) {
@@ -37,124 +31,132 @@
       fullKey = this._buildKey(key);
       this.store.setItem(fullKey, this._encode(data));
       if (!options.suppressEvent) {
-        this._fireEvent('keyChanged', {
+        return this._fireEvent('keyChanged', {
           key: fullKey,
           operation: 'set',
           value: data
         });
       }
-      return {
-        del: function(key) {
-          fullKey = this._buildKey(key);
-          this.store.removeItem(fullKey);
-          return this._fireEvent('keyDeleted', {
-            key: fullKey
-          });
-        },
-        push: function(key, data) {
-          var value;
+    };
 
-          value = this.get(key) || [];
-          value.push(data);
-          return this.set(key, value);
-        },
-        pop: function(key) {
-          var poppedData, value;
+    Depot.prototype.del = function(key) {
+      var fullKey;
 
-          value = this.get(key) || [];
-          poppedData = value.pop();
-          this.set(key, value);
-          return poppedData;
-        },
-        len: function(key) {
-          var value;
+      fullKey = this._buildKey(key);
+      this.store.removeItem(fullKey);
+      return this._fireEvent('keyDeleted', {
+        key: fullKey
+      });
+    };
 
-          value = this.get(key) || [];
-          return value.length;
-        },
-        incr: function(key, incrBy) {
-          var newValue;
+    Depot.prototype.push = function(key, data) {
+      var value;
 
-          if (incrBy == null) {
-            incrBy = 1;
-          }
-          newValue = this._modifyCounter(key, function(val) {
-            return val + incrBy;
-          });
-          this._fireEvent('keyChanged', {
-            key: this._buildKey(key),
-            operation: 'incr',
-            value: newValue
-          });
-          return newValue;
-        },
-        decr: function(key, decrBy) {
-          var newValue;
+      value = this.get(key) || [];
+      value.push(data);
+      return this.set(key, value);
+    };
 
-          if (decrBy == null) {
-            decrBy = 1;
-          }
-          newValue = this._modifyCounter(key, function(val) {
-            return val - decrBy;
-          });
-          this._fireEvent('keyChanged', {
-            key: this._buildKey(key),
-            operation: 'decr',
-            value: newValue
-          });
-          return newValue;
-        },
-        _modifyCounter: function(key, changeFunction) {
-          var currentValue, newValue;
+    Depot.prototype.pop = function(key) {
+      var poppedData, value;
 
-          currentValue = this.get(key) || 0;
-          if (typeof currentValue === "number") {
-            newValue = changeFunction(currentValue);
-            this.set(key, newValue, {
-              suppressEvent: true
-            });
-            return newValue;
-          } else {
-            throw "Cannot perform counter operation on non-number";
-          }
-        },
-        _encode: function(data) {
-          return JSON.stringify(data);
-        },
-        _decode: function(data) {
-          return JSON.parse(data);
-        },
-        _buildKey: function(key) {
-          if (this._isArray(key)) {
-            if (this.keyPrefix) {
-              key.unshift(this.keyPrefix);
-            }
-            return key.join(":");
-          } else {
-            if (this.keyPrefix) {
-              return "" + this.keyPrefix + ":" + key;
-            }
-            return key;
-          }
-        },
-        _fireEvent: function(eventName, detail) {
-          var e;
+      value = this.get(key) || [];
+      poppedData = value.pop();
+      this.set(key, value);
+      return poppedData;
+    };
 
-          detail.eventType = eventName;
-          e = new CustomEvent('depot:keyEvent', {
-            detail: detail
-          });
-          return window.dispatchEvent(e);
-        },
-        _isArray: Array.isArray || function(obj) {
-          return toString.call(obj) === '[object Array]';
-        },
-        remainingSpace: function() {
-          return 1024 * 1024 * 5 - unescape(encodeURIComponent(JSON.stringify(this.store))).length;
+    Depot.prototype.len = function(key) {
+      var value;
+
+      value = this.get(key) || [];
+      return value.length;
+    };
+
+    Depot.prototype.incr = function(key, incrBy) {
+      var newValue;
+
+      if (incrBy == null) {
+        incrBy = 1;
+      }
+      newValue = this._modifyCounter(key, function(val) {
+        return val + incrBy;
+      });
+      this._fireEvent('keyChanged', {
+        key: this._buildKey(key),
+        operation: 'incr',
+        value: newValue
+      });
+      return newValue;
+    };
+
+    Depot.prototype.decr = function(key, decrBy) {
+      var newValue;
+
+      if (decrBy == null) {
+        decrBy = 1;
+      }
+      newValue = this._modifyCounter(key, function(val) {
+        return val - decrBy;
+      });
+      this._fireEvent('keyChanged', {
+        key: this._buildKey(key),
+        operation: 'decr',
+        value: newValue
+      });
+      return newValue;
+    };
+
+    Depot.prototype._modifyCounter = function(key, changeFunction) {
+      var currentValue, newValue;
+
+      currentValue = this.get(key) || 0;
+      if (typeof currentValue === "number") {
+        newValue = changeFunction(currentValue);
+        this.set(key, newValue, {
+          suppressEvent: true
+        });
+        return newValue;
+      } else {
+        throw "Cannot perform counter operation on non-number";
+      }
+    };
+
+    Depot.prototype._encode = function(data) {
+      return JSON.stringify(data);
+    };
+
+    Depot.prototype._decode = function(data) {
+      return JSON.parse(data);
+    };
+
+    Depot.prototype._buildKey = function(key) {
+      if (this._isArray(key)) {
+        if (this.keyPrefix) {
+          key.unshift(this.keyPrefix);
         }
-      };
-    }
-  });
+        return key.join(":");
+      } else {
+        if (this.keyPrefix) {
+          return "" + this.keyPrefix + ":" + key;
+        }
+        return key;
+      }
+    };
+
+    Depot.prototype._fireEvent = function(eventName, detail) {};
+
+    Depot.prototype._isArray = Array.isArray || function(obj) {
+      return toString.call(obj) === '[object Array]';
+    };
+
+    Depot.prototype.remainingSpace = function() {
+      return 1024 * 1024 * 5 - unescape(encodeURIComponent(JSON.stringify(this.store))).length;
+    };
+
+    return Depot;
+
+  })();
 
   this.Depot = Depot;
 
