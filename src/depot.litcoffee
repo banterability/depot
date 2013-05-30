@@ -1,9 +1,46 @@
+**Vent**
+
+Manages events that occur internally. Heavily inspired by an internal events framework 
+
+    class Vent
+      constructor: ->
+        @listeners = {"*": []}
+
+      on: (key, callback) ->
+        @listeners[key] ?= []
+        @listeners[key].push callback
+
+      off: (key, callback) ->
+        @listeners[key].splice(index, 1) for index, value of @listeners[key] when value is callback
+
+      emit: (key, args...) ->
+        @listeners[key] ?= []
+        callback(args...) for callback in @listeners[key]
+        callback(key, args...) for callback in @listeners["*"]
+
+class DepotEvents
+
+  emit: (key, args...) ->
+    console.log "Emiting event #{key} with payload", args...
+    @_splitKeyAndBubble(key, args...) if key.indexOf(":") != -1
+
+  _splitKeyAndBubble: (key, args...) ->
+    keyParts = key.split(":")
+    args.bubbled = keyParts.pop()
+    nextKey = keyParts.join(":")
+    @emit nextKey, args...
+
+
+
+
+
+
 **Depot**
 
     class Depot
       constructor: (options) ->
         @checkDependencies()
-        @vent = {}
+        @vent = new Vent
         @store = window.localStorage
         @keyPrefix = options?.prefix
 
