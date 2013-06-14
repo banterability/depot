@@ -2,7 +2,7 @@
 
 Treat [window.localStorage][1] more like [Redis][2]
 
-[![Build Status](https://secure.travis-ci.org/banterability/depot.png?branch=literate-rewrite)](http://travis-ci.org/banterability/depot)
+[![Build Status](https://secure.travis-ci.org/banterability/depot.png?branch=master)](http://travis-ci.org/banterability/depot)
 
 ## Usage
 
