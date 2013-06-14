@@ -27,36 +27,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p><strong>Vent</strong></p>
-<p>Manages events that occur internally. Heavily inspired by an internal events framework </p>
-<p>class Vent
- constructor: -&gt;
-   @listeners = {&quot;*&quot;: []}</p>
-<p> on: (key, callback) -&gt;
-   @listeners[key] ?= []
-   @listeners[key].push callback</p>
-<p> off: (key, callback) -&gt;
-   @listeners[key].splice(index, 1) for index, value of @listeners[key] when value is callback</p>
-<p> emit: (key, args...) -&gt;
-   @listeners[key] ?= []
-   callback(args...) for callback in @listeners[key]
-   callback(key, args...) for callback in @listeners[&quot;*&quot;]</p>
-<p>class DepotEvents</p>
-<p> emit: (key, args...) -&gt;
-   console.log &quot;Emiting event #{key} with payload&quot;, args...
-   @_splitKeyAndBubble(key, args...) if key.indexOf(&quot;:&quot;) != -1</p>
-<p> _splitKeyAndBubble: (key, args...) -&gt;
-   keyParts = key.split(&quot;:&quot;)
-   args.bubbled = keyParts.pop()
-   nextKey = keyParts.join(&quot;:&quot;)
-   @emit nextKey, args...</p>
-<p><strong>Depot</strong></p>
+              <p><strong>Depot</strong></p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">Depot</span></span>
   constructor: (options) -&gt;
-    <span class="property">@checkDependencies</span>()</pre></div></div>
+    <span class="property">@checkDependencies</span>()
+    <span class="property">@store</span> = window.localStorage
+    <span class="property">@keyPrefix</span> = options?.prefix</pre></div></div>
             
         </li>
         
@@ -66,22 +45,6 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>@vent = new Vent</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="property">@store</span> = window.localStorage
-    <span class="property">@keyPrefix</span> = options?.prefix</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Depot requires browser support for the HTML5 localStorage API and JSON encoding/decoding. If either is missing, throw an error.</p>
 
@@ -94,11 +57,11 @@
         </li>
         
         
-        <li id="section-4">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <h2>Basic key methods</h2>
 <p><strong>get:</strong> Get a value from the store by key</p>
@@ -111,25 +74,35 @@
         </li>
         
         
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><strong>set:</strong> Store a value in the store at a specified key.</p>
+<p>Optional</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  set: (key, data) -&gt;
+    <span class="property">@store</span>.setItem <span class="property">@_buildKey</span>(key), <span class="property">@_encode</span>(data)</pre></div></div>
+            
+        </li>
+        
+        
         <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p><strong>set:</strong> Store a value in the store at a specified key.</p>
-<p>Accepts an optional <em>options</em> object with the following valid values:</p>
-<ul>
-<li><code>suppressEvent: true</code>: Prevents <code>set</code> from firing an event. This is used by higher level methods that perform complex operations, but rely on <code>set</code> to actually interact with the store.</li>
-</ul>
-<p>Optional</p>
+              <p><strong>del:</strong> Remove a value from the store by key</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  set: (key, data, options = {}) -&gt;
-    fullKey = <span class="property">@_buildKey</span> key
-    <span class="property">@store</span>.setItem fullKey, <span class="property">@_encode</span>(data)
-    <span class="property">@_fireEvent</span> <span class="string">'keyChanged'</span>, {key: fullKey, operation: <span class="string">'set'</span>, value: data} <span class="keyword">unless</span> options.suppressEvent</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  del: (key) -&gt;
+    <span class="property">@store</span>.removeItem <span class="property">@_buildKey</span> key</pre></div></div>
             
         </li>
         
@@ -137,17 +110,27 @@
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p><strong>del:</strong> Remove a value from the store by key</p>
+              <h2>Array methods</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  del: (key) -&gt;
-    fullKey = <span class="property">@_buildKey</span> key
-    <span class="property">@store</span>.removeItem fullKey
-    <span class="property">@_fireEvent</span> <span class="string">'keyDeleted'</span>, key: fullKey</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  push: (key, data) -&gt;
+    value = <span class="property">@get</span>(key) || []
+    value.push data
+    <span class="property">@set</span> key, value
+
+  pop: (key) -&gt;
+    value = <span class="property">@get</span>(key) || []
+    poppedData = value.pop()
+    <span class="property">@set</span> key, value
+    poppedData <span class="comment"># Return popped object</span>
+
+  len: (key) -&gt;
+    value = <span class="property">@get</span>(key) || []
+    value.length</pre></div></div>
             
         </li>
         
@@ -158,80 +141,21 @@
               <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <h2>Array methods</h2>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  push: (key, data) -&gt;
-    value = <span class="property">@get</span>(key) || []
-    value.push data
-    <span class="property">@set</span> key, value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <p>todo: fire eevent</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  pop: (key) -&gt;
-    value = <span class="property">@get</span>(key) || []
-    poppedData = value.pop()
-    <span class="property">@set</span> key, value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>todo: fire event</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    poppedData <span class="comment"># Return popped object</span>
-
-  len: (key) -&gt;
-    value = <span class="property">@get</span>(key) || []
-    value.length</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
               <h2>Counter methods</h2>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  incr: (key, incrBy = <span class="number">1</span>) -&gt;
-    newValue = <span class="property">@_modifyCounter</span> key, (val) -&gt; val + incrBy
-    <span class="property">@_fireEvent</span> <span class="string">'keyChanged'</span>, {key: <span class="property">@_buildKey</span>(key), operation: <span class="string">'incr'</span>, value: newValue}
-    newValue
+    <span class="property">@_modifyCounter</span> key, (val) -&gt; val + incrBy
 
   decr: (key, decrBy = <span class="number">1</span>) -&gt;
-    newValue = <span class="property">@_modifyCounter</span> key, (val) -&gt; val - decrBy
-    <span class="property">@_fireEvent</span> <span class="string">'keyChanged'</span>, {key: <span class="property">@_buildKey</span>(key), operation: <span class="string">'decr'</span>, value: newValue}
-    newValue
+    <span class="property">@_modifyCounter</span> key, (val) -&gt; val - decrBy
 
   _modifyCounter: (key, changeFunction) -&gt;
     currentValue = <span class="property">@get</span>(key) || <span class="number">0</span>
     <span class="keyword">if</span> <span class="keyword">typeof</span> currentValue == <span class="string">"number"</span>
       newValue = changeFunction(currentValue)
-      <span class="property">@set</span> key, newValue, suppressEvent: <span class="literal">true</span>
+      <span class="property">@set</span> key, newValue
       newValue
     <span class="keyword">else</span>
       <span class="keyword">throw</span> <span class="string">"Cannot perform counter operation on non-number"</span></pre></div></div>
@@ -239,11 +163,11 @@
         </li>
         
         
-        <li id="section-11">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <h2>Encoding/decoding</h2>
 <p>Allows native object storage by converting everything to JSON</p>
@@ -259,11 +183,11 @@
         </li>
         
         
-        <li id="section-12">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <h2>Key manipulation</h2>
 <p>Supports the creation of a key from an array of parts:</p>
@@ -282,31 +206,13 @@
         </li>
         
         
-        <li id="section-13">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <h2>Utility methods</h2>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  _fireEvent: (eventName, detail) -&gt;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
-              <p>detail.eventType = eventName
-e = {&#39;hey&#39;}
-e = new CustomEvent &#39;depot:keyEvent&#39;, {detail} // doesn&#39;t work with phantom apparently
-window.dispatchEvent(e)</p>
 <p>Lifted from Underscore.js</p>
 
             </div>
@@ -320,11 +226,11 @@ window.dispatchEvent(e)</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Attach <strong>Depot</strong> to the <code>window</code> object for access in browser.</p>
 

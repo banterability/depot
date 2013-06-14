@@ -89,5 +89,3 @@ describe "Depot", ->
   describe "Key prefixing", ->
     # prepends a string to keys if intialized with a prefix
     # does nothing if a prefix is not provided
-
-  describe "Events", ->

@@ -78,8 +78,7 @@
     });
     describe("Array methods", function() {});
     describe("Counter methods", function() {});
-    describe("Key prefixing", function() {});
-    return describe("Events", function() {});
+    return describe("Key prefixing", function() {});
   });
 
 }).call(this);

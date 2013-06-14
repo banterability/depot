@@ -24,22 +24,6 @@ Treat [window.localStorage][1] more like [Redis][2]
     store.set('album', {album: "Mass Romantic", band: "The New Pornographers", year: 2000});
     ```
 
-- Events on key changes
-
-    ```javascript
-    // key 'jennifers' = 26
-
-    window.addEventListener('depot:keyEvent', function(ev){
-        if (ev.detail.operation == 'incr'){
-            console.log('Key incremented: ' + ev.detail.value + ' ' + ev.detail.key);
-        }
-    }, false);
-
-    store.incr('entries');
-
-    -> (+) 27 jennifers
-    ```
-
 - Array methods:
 
     ```javascript
@@ -83,12 +67,6 @@ Treat [window.localStorage][1] more like [Redis][2]
     -> 10
     ```
 
-- Flexibile key generation:
-
-    ```javascript
-    // tk
-    ```
-
 - Key prefixing:
 
     ```javascript
@@ -97,19 +75,13 @@ Treat [window.localStorage][1] more like [Redis][2]
     // same as: window.localStorage.getItem('myapp:username');
     ```
 
-## Events API
-
-- Documentation to come
-
 ## Non-features
 
 - Doesn't emulate localStorage for older browsers (and never will)
 
 ## Future development
 
-- Feature detection
-- Left-side methods on arrays (shift, unshift)
-- Subscribe to changes on a single key
+- Events API
 
 [1]: http://dev.w3.org/html5/webstorage/#storage
 [2]: http://redis.io/commands

@@ -1,41 +1,8 @@
-**Vent**
-
-Manages events that occur internally. Heavily inspired by an internal events framework 
-
-    #class Vent
-    #  constructor: ->
-    #    @listeners = {"*": []}
-
-    #  on: (key, callback) ->
-    #    @listeners[key] ?= []
-    #    @listeners[key].push callback
-
-    #  off: (key, callback) ->
-    #    @listeners[key].splice(index, 1) for index, value of @listeners[key] when value is callback
-
-    #  emit: (key, args...) ->
-    #    @listeners[key] ?= []
-    #    callback(args...) for callback in @listeners[key]
-    #    callback(key, args...) for callback in @listeners["*"]
-
-    #class DepotEvents
-    #
-    #  emit: (key, args...) ->
-    #    console.log "Emiting event #{key} with payload", args...
-    #    @_splitKeyAndBubble(key, args...) if key.indexOf(":") != -1
-    #
-    #  _splitKeyAndBubble: (key, args...) ->
-    #    keyParts = key.split(":")
-    #    args.bubbled = keyParts.pop()
-    #    nextKey = keyParts.join(":")
-    #    @emit nextKey, args...
-
 **Depot**
 
     class Depot
       constructor: (options) ->
         @checkDependencies()
-        # @vent = new Vent
         @store = window.localStorage
         @keyPrefix = options?.prefix
 
@@ -55,23 +22,15 @@ Depot requires browser support for the HTML5 localStorage API and JSON encoding/
 
 **set:** Store a value in the store at a specified key.
 
-Accepts an optional *options* object with the following valid values:
-
-- `suppressEvent: true`: Prevents `set` from firing an event. This is used by higher level methods that perform complex operations, but rely on `set` to actually interact with the store.
-
 Optional
 
-      set: (key, data, options = {}) ->
-        fullKey = @_buildKey key
-        @store.setItem fullKey, @_encode(data)
-        @_fireEvent 'keyChanged', {key: fullKey, operation: 'set', value: data} unless options.suppressEvent
+      set: (key, data) ->
+        @store.setItem @_buildKey(key), @_encode(data)
 
 **del:** Remove a value from the store by key
 
       del: (key) ->
-        fullKey = @_buildKey key
-        @store.removeItem fullKey
-        @_fireEvent 'keyDeleted', key: fullKey
+        @store.removeItem @_buildKey key
 
 ## Array methods
 
@@ -79,13 +38,11 @@ Optional
         value = @get(key) || []
         value.push data
         @set key, value
-        # todo: fire eevent
 
       pop: (key) ->
         value = @get(key) || []
         poppedData = value.pop()
         @set key, value
-        # todo: fire event
         poppedData # Return popped object
 
       len: (key) ->
@@ -95,20 +52,16 @@ Optional
 ## Counter methods
 
       incr: (key, incrBy = 1) ->
-        newValue = @_modifyCounter key, (val) -> val + incrBy
-        @_fireEvent 'keyChanged', {key: @_buildKey(key), operation: 'incr', value: newValue}
-        newValue
+        @_modifyCounter key, (val) -> val + incrBy
 
       decr: (key, decrBy = 1) ->
-        newValue = @_modifyCounter key, (val) -> val - decrBy
-        @_fireEvent 'keyChanged', {key: @_buildKey(key), operation: 'decr', value: newValue}
-        newValue
+        @_modifyCounter key, (val) -> val - decrBy
 
       _modifyCounter: (key, changeFunction) ->
         currentValue = @get(key) || 0
         if typeof currentValue == "number"
           newValue = changeFunction(currentValue)
-          @set key, newValue, suppressEvent: true
+          @set key, newValue
           newValue
         else
           throw "Cannot perform counter operation on non-number"
@@ -138,12 +91,6 @@ Supports the creation of a key from an array of parts:
           key
 
 ## Utility methods
-
-      _fireEvent: (eventName, detail) ->
-        # detail.eventType = eventName
-        # e = {'hey'}
-        # e = new CustomEvent 'depot:keyEvent', {detail} // doesn't work with phantom apparently
-        # window.dispatchEvent(e)
 
       # Lifted from Underscore.js
       _isArray: Array.isArray || (obj) ->

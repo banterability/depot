@@ -22,31 +22,12 @@
       return this._decode(this.store.getItem(this._buildKey(key)));
     };
 
-    Depot.prototype.set = function(key, data, options) {
-      var fullKey;
-
-      if (options == null) {
-        options = {};
-      }
-      fullKey = this._buildKey(key);
-      this.store.setItem(fullKey, this._encode(data));
-      if (!options.suppressEvent) {
-        return this._fireEvent('keyChanged', {
-          key: fullKey,
-          operation: 'set',
-          value: data
-        });
-      }
+    Depot.prototype.set = function(key, data) {
+      return this.store.setItem(this._buildKey(key), this._encode(data));
     };
 
     Depot.prototype.del = function(key) {
-      var fullKey;
-
-      fullKey = this._buildKey(key);
-      this.store.removeItem(fullKey);
-      return this._fireEvent('keyDeleted', {
-        key: fullKey
-      });
+      return this.store.removeItem(this._buildKey(key));
     };
 
     Depot.prototype.push = function(key, data) {
@@ -74,37 +55,21 @@
     };
 
     Depot.prototype.incr = function(key, incrBy) {
-      var newValue;
-
       if (incrBy == null) {
         incrBy = 1;
       }
-      newValue = this._modifyCounter(key, function(val) {
+      return this._modifyCounter(key, function(val) {
         return val + incrBy;
       });
-      this._fireEvent('keyChanged', {
-        key: this._buildKey(key),
-        operation: 'incr',
-        value: newValue
-      });
-      return newValue;
     };
 
     Depot.prototype.decr = function(key, decrBy) {
-      var newValue;
-
       if (decrBy == null) {
         decrBy = 1;
       }
-      newValue = this._modifyCounter(key, function(val) {
+      return this._modifyCounter(key, function(val) {
         return val - decrBy;
       });
-      this._fireEvent('keyChanged', {
-        key: this._buildKey(key),
-        operation: 'decr',
-        value: newValue
-      });
-      return newValue;
     };
 
     Depot.prototype._modifyCounter = function(key, changeFunction) {
@@ -113,9 +78,7 @@
       currentValue = this.get(key) || 0;
       if (typeof currentValue === "number") {
         newValue = changeFunction(currentValue);
-        this.set(key, newValue, {
-          suppressEvent: true
-        });
+        this.set(key, newValue);
         return newValue;
       } else {
         throw "Cannot perform counter operation on non-number";
@@ -143,8 +106,6 @@
         return key;
       }
     };
-
-    Depot.prototype._fireEvent = function(eventName, detail) {};
 
     Depot.prototype._isArray = Array.isArray || function(obj) {
       return toString.call(obj) === '[object Array]';
