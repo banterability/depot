@@ -27,7 +27,7 @@ Treat [window.localStorage][1] more like [Redis][2]
 - Events on key changes
 
     ```javascript
-    // 'jennifers' = 4
+    // key 'jennifers' = 26
 
     window.addEventListener('depot:keyEvent', function(ev){
         if (ev.detail.operation == 'incr'){
@@ -55,7 +55,7 @@ Treat [window.localStorage][1] more like [Redis][2]
 
         ```javascript
         store.pop('extracurriculars')
-        -> '2nd Corale'
+        -> '2nd Chorale'
         // 'numbers' = ['Yankee Review', 'French Club', 'Model UN']
         ```
 
@@ -75,8 +75,8 @@ Treat [window.localStorage][1] more like [Redis][2]
 - Simple counter manipulation with `incr` and `decr`:
 
     ```javascript
-    // 'bottles_of_beer_on_the_wall' = 99
-    store.decr('bottles_of_beer_on_the_wall')
+    // key 'bottlesOfBeerOnTheWall' = 99
+    store.decr('bottlesOfBeerOnTheWall')
     -> 98
 
     store.incr('visitors', 10)
